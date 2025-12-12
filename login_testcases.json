@@ -1,0 +1,385 @@
+{
+  "testCases": [
+    {
+      "id": "TC-LOGIN-001",
+      "module": "Login Page",
+      "function": "testLoginPageElementsVisibility",
+      "title": "Verify visibility of all key UI elements on the Login page",
+      "preconditions": "Browser is open and navigated to the login page.",
+      "inputs": {
+        "url": "https://dev.vox.snappod.ai/login"
+      },
+      "steps": [
+        "Navigate to the login page: await page.goto(inputs.url)",
+        "Verify SnapPod Logo is visible: await expect(page.getByAltText('SnapPod Logo')).toBeVisible()",
+        "Verify 'Welcome Back!' heading is visible: await expect(page.getByRole('heading', { name: 'Welcome Back!' })).toBeVisible()",
+        "Verify 'Email *' label is visible: await expect(page.getByLabelText('Email *')).toBeVisible()",
+        "Verify 'Password *' label is visible: await expect(page.getByLabelText('Password *')).toBeVisible()",
+        "Verify 'Forgot Password' link is visible: await expect(page.getByRole('link', { name: 'Forgot Password' })).toBeVisible()",
+        "Verify 'Login' button is visible: await expect(page.getByRole('button', { name: 'Login' })).toBeVisible()",
+        "Verify 'or' text is visible: await expect(page.getByText('or')).toBeVisible()",
+        "Verify 'Sign in with Google' button is visible: await expect(page.getByRole('button', { name: 'Sign in with Google' })).toBeVisible()",
+        "Verify 'Don't have an account?' text is visible: await expect(page.getByText('Don\\'t have an account?')).toBeVisible()",
+        "Verify 'Sign Up Here' link is visible: await expect(page.getByRole('link', { name: 'Sign Up Here' })).toBeVisible()"
+      ],
+      "expected": [
+        "All specified UI elements are visible and correctly displayed on the login page."
+      ]
+    },
+    {
+      "id": "TC-LOGIN-002",
+      "module": "Login Page",
+      "function": "testSuccessfulLogin",
+      "title": "Verify user can successfully log in with valid credentials",
+      "preconditions": "Browser is open and navigated to the login page. User has valid credentials.",
+      "inputs": {
+        "url": "https://dev.vox.snappod.ai/login",
+        "email": "tadikamallasivaparvathi.com",
+        "password": "Siva@2001",
+        "emailLocator": "getByLabelText('Email *')",
+        "passwordLocator": "getByLabelText('Password *')",
+        "loginButtonLocator": "getByRole('button', { name: 'Login' })"
+      },
+      "steps": [
+        "Navigate to the login page: await page.goto(inputs.url)",
+        "Enter valid email address: await page.locator(inputs.emailLocator).fill(inputs.email)",
+        "Enter valid password: await page.locator(inputs.passwordLocator).fill(inputs.password)",
+        "Click the 'Login' button: await page.locator(inputs.loginButtonLocator).click()",
+        "Verify successful navigation to a protected dashboard page or success message: await expect(page).toHaveURL(/dashboard/)"
+      ],
+      "expected": [
+        "User is redirected to the dashboard or a success message is displayed.",
+        "No error messages are shown."
+      ]
+    },
+    {
+      "id": "TC-LOGIN-003",
+      "module": "Login Page",
+      "function": "testInvalidCredentialsLogin",
+      "title": "Verify login fails with invalid credentials and shows error",
+      "preconditions": "Browser is open and navigated to the login page.",
+      "inputs": {
+        "url": "https://dev.vox.snappod.ai/login",
+        "email": "invaliduser@example.com",
+        "password": "WrongPassword123",
+        "emailLocator": "getByLabelText('Email *')",
+        "passwordLocator": "getByLabelText('Password *')",
+        "loginButtonLocator": "getByRole('button', { name: 'Login' })",
+        "expectedErrorMessage": "Invalid credentials. Please try again."
+      },
+      "steps": [
+        "Navigate to the login page: await page.goto(inputs.url)",
+        "Enter invalid email address: await page.locator(inputs.emailLocator).fill(inputs.email)",
+        "Enter incorrect password: await page.locator(inputs.passwordLocator).fill(inputs.password)",
+        "Click the 'Login' button: await page.locator(inputs.loginButtonLocator).click()",
+        "Verify an error message is displayed: await expect(page.getByText(inputs.expectedErrorMessage)).toBeVisible()",
+        "Verify the user remains on the login page: await expect(page).toHaveURL(inputs.url)"
+      ],
+      "expected": [
+        "An appropriate error message for invalid credentials is displayed.",
+        "User remains on the login page."
+      ]
+    },
+    {
+      "id": "TC-LOGIN-004",
+      "module": "Login Page",
+      "function": "testEmptyEmailLogin",
+      "title": "Verify login fails when email field is empty",
+      "preconditions": "Browser is open and navigated to the login page.",
+      "inputs": {
+        "url": "https://dev.vox.snappod.ai/login",
+        "email": "",
+        "password": "AnyPassword123",
+        "emailLocator": "getByLabelText('Email *')",
+        "passwordLocator": "getByLabelText('Password *')",
+        "loginButtonLocator": "getByRole('button', { name: 'Login' })"
+      },
+      "steps": [
+        "Navigate to the login page: await page.goto(inputs.url)",
+        "Ensure email field is empty: await page.locator(inputs.emailLocator).fill(inputs.email)",
+        "Enter a password: await page.locator(inputs.passwordLocator).fill(inputs.password)",
+        "Click the 'Login' button: await page.locator(inputs.loginButtonLocator).click()",
+        "Verify the email input field shows a validation message: await expect(page.locator(inputs.emailLocator)).toHaveJSProperty('validationMessage', 'Please fill out this field.')",
+        "Verify user remains on the login page: await expect(page).toHaveURL(inputs.url)"
+      ],
+      "expected": [
+        "A browser-level or UI validation message prompts the user to fill out the email field.",
+        "User remains on the login page."
+      ]
+    },
+    {
+      "id": "TC-LOGIN-005",
+      "module": "Login Page",
+      "function": "testEmptyPasswordLogin",
+      "title": "Verify login fails when password field is empty",
+      "preconditions": "Browser is open and navigated to the login page.",
+      "inputs": {
+        "url": "https://dev.vox.snappod.ai/login",
+        "email": "test@example.com",
+        "password": "",
+        "emailLocator": "getByLabelText('Email *')",
+        "passwordLocator": "getByLabelText('Password *')",
+        "loginButtonLocator": "getByRole('button', { name: 'Login' })"
+      },
+      "steps": [
+        "Navigate to the login page: await page.goto(inputs.url)",
+        "Enter an email address: await page.locator(inputs.emailLocator).fill(inputs.email)",
+        "Ensure password field is empty: await page.locator(inputs.passwordLocator).fill(inputs.password)",
+        "Click the 'Login' button: await page.locator(inputs.loginButtonLocator).click()",
+        "Verify the password input field shows a validation message: await expect(page.locator(inputs.passwordLocator)).toHaveJSProperty('validationMessage', 'Please fill out this field.')",
+        "Verify user remains on the login page: await expect(page).toHaveURL(inputs.url)"
+      ],
+      "expected": [
+        "A browser-level or UI validation message prompts the user to fill out the password field.",
+        "User remains on the login page."
+      ]
+    },
+    {
+      "id": "TC-LOGIN-006",
+      "module": "Login Page",
+      "function": "testInvalidEmailFormatLogin",
+      "title": "Verify login fails with invalid email format",
+      "preconditions": "Browser is open and navigated to the login page.",
+      "inputs": {
+        "url": "https://dev.vox.snappod.ai/login",
+        "email": "invalid-email",
+        "password": "ValidPassword123",
+        "emailLocator": "getByLabelText('Email *')",
+        "passwordLocator": "getByLabelText('Password *')",
+        "loginButtonLocator": "getByRole('button', { name: 'Login' })"
+      },
+      "steps": [
+        "Navigate to the login page: await page.goto(inputs.url)",
+        "Enter an invalid email format: await page.locator(inputs.emailLocator).fill(inputs.email)",
+        "Enter a password: await page.locator(inputs.passwordLocator).fill(inputs.password)",
+        "Click the 'Login' button: await page.locator(inputs.loginButtonLocator).click()",
+        "Verify the email input field shows a validation message: await expect(page.locator(inputs.emailLocator)).toHaveJSProperty('validationMessage', expect.stringContaining('@'))",
+        "Verify user remains on the login page: await expect(page).toHaveURL(inputs.url)"
+      ],
+      "expected": [
+        "A browser-level or UI validation message prompts the user for a valid email format.",
+        "User remains on the login page."
+      ]
+    },
+    {
+      "id": "TC-LOGIN-007",
+      "module": "Login Page",
+      "function": "testShowPasswordToggle",
+      "title": "Verify 'Show password' toggle changes password input type",
+      "preconditions": "Browser is open and navigated to the login page.",
+      "inputs": {
+        "url": "https://dev.vox.snappod.ai/login",
+        "password": "TestPassword123",
+        "passwordInputLocator": "getByLabelText('Password *')",
+        "showPasswordToggleLocator": "getByLabel('Show password')"
+      },
+      "steps": [
+        "Navigate to the login page: await page.goto(inputs.url)",
+        "Enter a password into the password field: await page.locator(inputs.passwordInputLocator).fill(inputs.password)",
+        "Verify the input type is 'password': await expect(page.locator(inputs.passwordInputLocator)).toHaveAttribute('type', 'password')",
+        "Click the 'Show password' toggle: await page.locator(inputs.showPasswordToggleLocator).click()",
+        "Verify the input type is now 'text': await expect(page.locator(inputs.passwordInputLocator)).toHaveAttribute('type', 'text')",
+        "Click the 'Show password' toggle again: await page.locator(inputs.showPasswordToggleLocator).click()",
+        "Verify the input type is back to 'password': await expect(page.locator(inputs.passwordInputLocator)).toHaveAttribute('type', 'password')"
+      ],
+      "expected": [
+        "The password input field toggles between 'password' and 'text' type on each click of the 'Show password' toggle."
+      ]
+    },
+    {
+      "id": "TC-LOGIN-008",
+      "module": "Login Page",
+      "function": "testNavigateToSignUpPage",
+      "title": "Verify 'Sign Up Here' link navigates to the Sign Up page",
+      "preconditions": "Browser is open and navigated to the login page.",
+      "inputs": {
+        "url": "https://dev.vox.snappod.ai/login",
+        "signUpLinkLocator": "getByRole('link', { name: 'Sign Up Here' })",
+        "expectedSignUpUrl": "https://dev.vox.snappod.ai/signup"
+      },
+      "steps": [
+        "Navigate to the login page: await page.goto(inputs.url)",
+        "Click the 'Sign Up Here' link: await page.locator(inputs.signUpLinkLocator).click()",
+        "Verify navigation to the Sign Up page: await expect(page).toHaveURL(inputs.expectedSignUpUrl)"
+      ],
+      "expected": [
+        "User is successfully redirected to the Sign Up page."
+      ]
+    },
+    {
+      "id": "TC-LOGIN-009",
+      "module": "Login Page",
+      "function": "testForgotPasswordLinkOpensModal",
+      "title": "Verify 'Forgot Password' link opens the password reset modal",
+      "preconditions": "Browser is open and navigated to the login page.",
+      "inputs": {
+        "url": "https://dev.vox.snappod.ai/login",
+        "forgotPasswordLinkLocator": "getByRole('link', { name: 'Forgot Password' })",
+        "resetPasswordHeadingLocator": "getByRole('heading', { name: 'Reset Password' })"
+      },
+      "steps": [
+        "Navigate to the login page: await page.goto(inputs.url)",
+        "Click the 'Forgot Password' link: await page.locator(inputs.forgotPasswordLinkLocator).click()",
+        "Verify the 'Reset Password' heading in the modal is visible: await expect(page.locator(inputs.resetPasswordHeadingLocator)).toBeVisible()"
+      ],
+      "expected": [
+        "The password reset modal is displayed with the 'Reset Password' heading."
+      ]
+    },
+    {
+      "id": "TC-LOGIN-010",
+      "module": "Login Page",
+      "function": "testSignInWithGoogleButton",
+      "title": "Verify 'Sign in with Google' button initiates Google authentication flow",
+      "preconditions": "Browser is open and navigated to the login page.",
+      "inputs": {
+        "url": "https://dev.vox.snappod.ai/login",
+        "googleSignInButtonLocator": "getByRole('button', { name: 'Sign in with Google' })"
+      },
+      "steps": [
+        "Navigate to the login page: await page.goto(inputs.url)",
+        "Click the 'Sign in with Google' button: await page.locator(inputs.googleSignInButtonLocator).click()",
+        "Verify that a new page or modal related to Google authentication is opened (e.g., URL contains 'accounts.google.com'): await page.waitForURL(/accounts.google.com/)"
+      ],
+      "expected": [
+        "The browser navigates to or opens a modal for the Google authentication process."
+      ]
+    },
+    {
+      "id": "TC-FORGOTPASS-001",
+      "module": "Forgot Password Modal",
+      "function": "testForgotPasswordModalElementsVisibility",
+      "title": "Verify visibility of all key UI elements in the Forgot Password modal",
+      "preconditions": "Browser is open, navigated to login page, and Forgot Password modal is open.",
+      "inputs": {
+        "url": "https://dev.vox.snappod.ai/login",
+        "forgotPasswordLinkLocator": "getByRole('link', { name: 'Forgot Password' })",
+        "closeButtonLocator": "getByLabel('Close forgot password modal')",
+        "resetPasswordHeadingLocator": "getByRole('heading', { name: 'Reset Password' })",
+        "instructionTextLocator": "getByText('Enter your email to receive a reset code')",
+        "emailAddressLabelLocator": "getByLabelText('Email Address')",
+        "emailInputLocator": "getByPlaceholderText('Enter your email address')",
+        "sendResetCodeButtonLocator": "getByRole('button', { name: 'Send Reset Code' })"
+      },
+      "steps": [
+        "Navigate to the login page: await page.goto(inputs.url)",
+        "Click the 'Forgot Password' link to open the modal: await page.locator(inputs.forgotPasswordLinkLocator).click()",
+        "Verify close button is visible: await expect(page.locator(inputs.closeButtonLocator)).toBeVisible()",
+        "Verify 'Reset Password' heading is visible: await expect(page.locator(inputs.resetPasswordHeadingLocator)).toBeVisible()",
+        "Verify instruction text is visible: await expect(page.locator(inputs.instructionTextLocator)).toBeVisible()",
+        "Verify 'Email Address' label is visible: await expect(page.locator(inputs.emailAddressLabelLocator)).toBeVisible()",
+        "Verify email input field is visible: await expect(page.locator(inputs.emailInputLocator)).toBeVisible()",
+        "Verify 'Send Reset Code' button is visible: await expect(page.locator(inputs.sendResetCodeButtonLocator)).toBeVisible()"
+      ],
+      "expected": [
+        "All specified UI elements within the Forgot Password modal are visible."
+      ]
+    },
+    {
+      "id": "TC-FORGOTPASS-002",
+      "module": "Forgot Password Modal",
+      "function": "testCloseForgotPasswordModal",
+      "title": "Verify 'Close' button closes the Forgot Password modal",
+      "preconditions": "Browser is open, navigated to login page, and Forgot Password modal is open.",
+      "inputs": {
+        "url": "https://dev.vox.snappod.ai/login",
+        "forgotPasswordLinkLocator": "getByRole('link', { name: 'Forgot Password' })",
+        "closeButtonLocator": "getByLabel('Close forgot password modal')",
+        "resetPasswordHeadingLocator": "getByRole('heading', { name: 'Reset Password' })"
+      },
+      "steps": [
+        "Navigate to the login page: await page.goto(inputs.url)",
+        "Click the 'Forgot Password' link to open the modal: await page.locator(inputs.forgotPasswordLinkLocator).click()",
+        "Verify modal heading is visible initially: await expect(page.locator(inputs.resetPasswordHeadingLocator)).toBeVisible()",
+        "Click the close button: await page.locator(inputs.closeButtonLocator).click()",
+        "Verify the modal heading is no longer visible: await expect(page.locator(inputs.resetPasswordHeadingLocator)).not.toBeVisible()"
+      ],
+      "expected": [
+        "The Forgot Password modal is successfully closed and its elements are no longer visible."
+      ]
+    },
+    {
+      "id": "TC-FORGOTPASS-003",
+      "module": "Forgot Password Modal",
+      "function": "testSendResetCodeValidEmail",
+      "title": "Verify sending reset code with a valid email address",
+      "preconditions": "Browser is open, navigated to login page, and Forgot Password modal is open.",
+      "inputs": {
+        "url": "https://dev.vox.snappod.ai/login",
+        "forgotPasswordLinkLocator": "getByRole('link', { name: 'Forgot Password' })",
+        "emailInputLocator": "getByPlaceholderText('Enter your email address')",
+        "sendResetCodeButtonLocator": "getByRole('button', { name: 'Send Reset Code' })",
+        "validEmail": "tadikamallasivaparvathi@gmail.com",
+        "expectedSuccessMessage": "Password reset email sent. Please check your inbox."
+      },
+      "steps": [
+        "Navigate to the login page: await page.goto(inputs.url)",
+        "Click 'Forgot Password' link: await page.locator(inputs.forgotPasswordLinkLocator).click()",
+        "Enter a valid email address: await page.locator(inputs.emailInputLocator).fill(inputs.validEmail)",
+        "Click 'Send Reset Code' button: await page.locator(inputs.sendResetCodeButtonLocator).click()",
+        "Verify a success message is displayed: await expect(page.getByText(inputs.expectedSuccessMessage)).toBeVisible()",
+        "Verify the modal closes or indicates success state: await expect(page.getByRole('heading', { name: 'Reset Password' })).not.toBeVisible()"
+      ],
+      "expected": [
+        "A success message confirming the email sent is displayed.",
+        "The modal closes or updates to a success state."
+      ]
+    },
+    {
+      "id": "TC-FORGOTPASS-004",
+      "module": "Forgot Password Modal",
+      "function": "testSendResetCodeInvalidEmailFormat",
+      "title": "Verify error message for invalid email format when sending reset code",
+      "preconditions": "Browser is open, navigated to login page, and Forgot Password modal is open.",
+      "inputs": {
+        "url": "https://dev.vox.snappod.ai/login",
+        "forgotPasswordLinkLocator": "getByRole('link', { name: 'Forgot Password' })",
+        "emailInputLocator": "getByPlaceholderText('Enter your email address')",
+        "sendResetCodeButtonLocator": "getByRole('button', { name: 'Send Reset Code' })",
+        "invalidEmail": "bad-email",
+        "expectedValidationMessage": "Please include an '@' in the email address."
+      },
+      "steps": [
+        "Navigate to the login page: await page.goto(inputs.url)",
+        "Click 'Forgot Password' link: await page.locator(inputs.forgotPasswordLinkLocator).click()",
+        "Enter an invalid email format: await page.locator(inputs.emailInputLocator).fill(inputs.invalidEmail)",
+        "Click 'Send Reset Code' button: await page.locator(inputs.sendResetCodeButtonLocator).click()",
+        "Verify the email input field shows a validation message: await expect(page.locator(inputs.emailInputLocator)).toHaveJSProperty('validationMessage', expect.stringContaining('@'))",
+        "Verify the modal remains open: await expect(page.getByRole('heading', { name: 'Reset Password' })).toBeVisible()"
+      ],
+      "expected": [
+        "A browser-level or UI validation message prompts the user for a valid email format.",
+        "The modal remains open."
+      ]
+    },
+    {
+      "id": "TC-FORGOTPASS-005",
+      "module": "Forgot Password Modal",
+      "function": "testSendResetCodeEmptyEmail",
+      "title": "Verify error message for empty email when sending reset code",
+      "preconditions": "Browser is open, navigated to login page, and Forgot Password modal is open.",
+      "inputs": {
+        "url": "https://dev.vox.snappod.ai/login",
+        "forgotPasswordLinkLocator": "getByRole('link', { name: 'Forgot Password' })",
+        "emailInputLocator": "getByPlaceholderText('Enter your email address')",
+        "sendResetCodeButtonLocator": "getByRole('button', { name: 'Send Reset Code' })",
+        "emptyEmail": "",
+        "expectedValidationMessage": "Please fill out this field."
+      },
+      "steps": [
+        "Navigate to the login page: await page.goto(inputs.url)",
+        "Click 'Forgot Password' link: await page.locator(inputs.forgotPasswordLinkLocator).click()",
+        "Ensure email field is empty: await page.locator(inputs.emailInputLocator).fill(inputs.emptyEmail)",
+        "Click 'Send Reset Code' button: await page.locator(inputs.sendResetCodeButtonLocator).click()",
+        "Verify the email input field shows a validation message: await expect(page.locator(inputs.emailInputLocator)).toHaveJSProperty('validationMessage', inputs.expectedValidationMessage)",
+        "Verify the modal remains open: await expect(page.getByRole('heading', { name: 'Reset Password' })).toBeVisible()"
+      ],
+      "expected": [
+        "A browser-level or UI validation message prompts the user to fill out the email field.",
+        "The modal remains open."
+      ]
+    }
+  ],
+  "totalTestCases": 15,
+  "group": "Login & Forgot Password"
+}

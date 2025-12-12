@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Universal Test Report</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        h1 { color: #333; }
+        .summary { background: #f5f5f5; padding: 15px; border-radius: 5px; margin: 20px 0; }
+        .summary span { margin-right: 20px; font-weight: bold; }
+        .passed { color: green; }
+        .failed { color: red; }
+        table { width: 100%; border-collapse: collapse; margin: 20px 0; }
+        th, td { border: 1px solid #ddd; padding: 12px; text-align: left; }
+        th { background-color: #4CAF50; color: white; }
+        tr:nth-child(even) { background-color: #f2f2f2; }
+        .status-passed { background-color: #d4edda; }
+        .status-failed { background-color: #f8d7da; }
+        a { color: #007bff; text-decoration: none; }
+        a:hover { text-decoration: underline; }
+    </style>
+</head>
+<body>
+    <h1>Universal Test Report</h1>
+    <div class="summary">
+        <span>Total: 29</span>
+        <span class="passed">Passed: 22</span>
+        <span class="failed">Failed: 7</span>
+        <span>Pass Rate: 75.9%</span>
+        <span>Generated: 2025-12-12 19:11:59</span>
+    </div>
+    <table>
+        <tr>
+            <th>Test ID</th>
+            <th>Module</th>
+            <th>Title</th>
+            <th>Status</th>
+            <th>Artifacts</th>
+        </tr>        <tr class="status-failed">
+            <td>TC-LOGIN-001</td>
+            <td>Login Page</td>
+            <td>Verify visibility of all key UI elements on the Login page</td>
+            <td>FAILED</td>
+            <td><a href="TC-LOGIN-001/screenshots/" target="_blank">Screenshots</a> | 
+                <a href="TC-LOGIN-001/videos/" target="_blank">Videos</a> | 
+                <a href="TC-LOGIN-001/test.log" target="_blank">Log</a></td>
+        </tr>        <tr class="status-failed">
+            <td>TC-LOGIN-002</td>
+            <td>Login Page</td>
+            <td>Verify user can successfully log in with valid credentials</td>
+            <td>FAILED</td>
+            <td><a href="TC-LOGIN-002/screenshots/" target="_blank">Screenshots</a> | 
+                <a href="TC-LOGIN-002/videos/" target="_blank">Videos</a> | 
+                <a href="TC-LOGIN-002/test.log" target="_blank">Log</a></td>
+        </tr>        <tr class="status-passed">
+            <td>TC-LOGIN-003</td>
+            <td>Login Page</td>
+            <td>Verify login fails with invalid credentials and shows error</td>
+            <td>PASSED</td>
+            <td><a href="TC-LOGIN-003/screenshots/" target="_blank">Screenshots</a> | 
+                <a href="TC-LOGIN-003/videos/" target="_blank">Videos</a> | 
+                <a href="TC-LOGIN-003/test.log" target="_blank">Log</a></td>
+        </tr>        <tr class="status-passed">
+            <td>TC-LOGIN-004</td>
+            <td>Login Page</td>
+            <td>Verify login fails when email field is empty</td>
+            <td>PASSED</td>
+            <td><a href="TC-LOGIN-004/screenshots/" target="_blank">Screenshots</a> | 
+                <a href="TC-LOGIN-004/videos/" target="_blank">Videos</a> | 
+                <a href="TC-LOGIN-004/test.log" target="_blank">Log</a></td>
+        </tr>        <tr class="status-passed">
+            <td>TC-LOGIN-005</td>
+            <td>Login Page</td>
+            <td>Verify login fails when password field is empty</td>
+            <td>PASSED</td>
+            <td><a href="TC-LOGIN-005/screenshots/" target="_blank">Screenshots</a> | 
+                <a href="TC-LOGIN-005/videos/" target="_blank">Videos</a> | 
+                <a href="TC-LOGIN-005/test.log" target="_blank">Log</a></td>
+        </tr>        <tr class="status-passed">
+            <td>TC-LOGIN-006</td>
+            <td>Login Page</td>
+            <td>Verify login fails with invalid email format</td>
+            <td>PASSED</td>
+            <td><a href="TC-LOGIN-006/screenshots/" target="_blank">Screenshots</a> | 
+                <a href="TC-LOGIN-006/videos/" target="_blank">Videos</a> | 
+                <a href="TC-LOGIN-006/test.log" target="_blank">Log</a></td>
+        </tr>        <tr class="status-passed">
+            <td>TC-LOGIN-007</td>
+            <td>Login Page</td>
+            <td>Verify 'Show password' toggle changes password input type</td>
+            <td>PASSED</td>
+            <td><a href="TC-LOGIN-007/screenshots/" target="_blank">Screenshots</a> | 
+                <a href="TC-LOGIN-007/videos/" target="_blank">Videos</a> | 
+                <a href="TC-LOGIN-007/test.log" target="_blank">Log</a></td>
+        </tr>        <tr class="status-failed">
+            <td>TC-LOGIN-008</td>
+            <td>Login Page</td>
+            <td>Verify 'Sign Up Here' link navigates to the Sign Up page</td>
+            <td>FAILED</td>
+            <td><a href="TC-LOGIN-008/screenshots/" target="_blank">Screenshots</a> | 
+                <a href="TC-LOGIN-008/videos/" target="_blank">Videos</a> | 
+                <a href="TC-LOGIN-008/test.log" target="_blank">Log</a></td>
+        </tr>        <tr class="status-passed">
+            <td>TC-LOGIN-009</td>
+            <td>Login Page</td>
+            <td>Verify 'Forgot Password' link opens the password reset modal</td>
+            <td>PASSED</td>
+            <td><a href="TC-LOGIN-009/screenshots/" target="_blank">Screenshots</a> | 
+                <a href="TC-LOGIN-009/videos/" target="_blank">Videos</a> | 
+                <a href="TC-LOGIN-009/test.log" target="_blank">Log</a></td>
+        </tr>        <tr class="status-passed">
+            <td>TC-LOGIN-010</td>
+            <td>Login Page</td>
+            <td>Verify 'Sign in with Google' button initiates Google authentication flow</td>
+            <td>PASSED</td>
+            <td><a href="TC-LOGIN-010/screenshots/" target="_blank">Screenshots</a> | 
+                <a href="TC-LOGIN-010/videos/" target="_blank">Videos</a> | 
+                <a href="TC-LOGIN-010/test.log" target="_blank">Log</a></td>
+        </tr>        <tr class="status-passed">
+            <td>TC-FORGOTPASS-001</td>
+            <td>Forgot Password Modal</td>
+            <td>Verify visibility of all key UI elements in the Forgot Password modal</td>
+            <td>PASSED</td>
+            <td><a href="TC-FORGOTPASS-001/screenshots/" target="_blank">Screenshots</a> | 
+                <a href="TC-FORGOTPASS-001/videos/" target="_blank">Videos</a> | 
+                <a href="TC-FORGOTPASS-001/test.log" target="_blank">Log</a></td>
+        </tr>        <tr class="status-passed">
+            <td>TC-FORGOTPASS-002</td>
+            <td>Forgot Password Modal</td>
+            <td>Verify 'Close' button closes the Forgot Password modal</td>
+            <td>PASSED</td>
+            <td><a href="TC-FORGOTPASS-002/screenshots/" target="_blank">Screenshots</a> | 
+                <a href="TC-FORGOTPASS-002/videos/" target="_blank">Videos</a> | 
+                <a href="TC-FORGOTPASS-002/test.log" target="_blank">Log</a></td>
+        </tr>        <tr class="status-passed">
+            <td>TC-FORGOTPASS-003</td>
+            <td>Forgot Password Modal</td>
+            <td>Verify sending reset code with a valid email address</td>
+            <td>PASSED</td>
+            <td><a href="TC-FORGOTPASS-003/screenshots/" target="_blank">Screenshots</a> | 
+                <a href="TC-FORGOTPASS-003/videos/" target="_blank">Videos</a> | 
+                <a href="TC-FORGOTPASS-003/test.log" target="_blank">Log</a></td>
+        </tr>        <tr class="status-passed">
+            <td>TC-FORGOTPASS-004</td>
+            <td>Forgot Password Modal</td>
+            <td>Verify error message for invalid email format when sending reset code</td>
+            <td>PASSED</td>
+            <td><a href="TC-FORGOTPASS-004/screenshots/" target="_blank">Screenshots</a> | 
+                <a href="TC-FORGOTPASS-004/videos/" target="_blank">Videos</a> | 
+                <a href="TC-FORGOTPASS-004/test.log" target="_blank">Log</a></td>
+        </tr>        <tr class="status-passed">
+            <td>TC-FORGOTPASS-005</td>
+            <td>Forgot Password Modal</td>
+            <td>Verify error message for empty email when sending reset code</td>
+            <td>PASSED</td>
+            <td><a href="TC-FORGOTPASS-005/screenshots/" target="_blank">Screenshots</a> | 
+                <a href="TC-FORGOTPASS-005/videos/" target="_blank">Videos</a> | 
+                <a href="TC-FORGOTPASS-005/test.log" target="_blank">Log</a></td>
+        </tr>        <tr class="status-failed">
+            <td>TC-SIGNUP-001</td>
+            <td>Sign Up Page</td>
+            <td>Verify visibility of all key UI elements on the Sign Up page</td>
+            <td>FAILED</td>
+            <td><a href="TC-SIGNUP-001/screenshots/" target="_blank">Screenshots</a> | 
+                <a href="TC-SIGNUP-001/videos/" target="_blank">Videos</a> | 
+                <a href="TC-SIGNUP-001/test.log" target="_blank">Log</a></td>
+        </tr>        <tr class="status-failed">
+            <td>TC-SIGNUP-002</td>
+            <td>Sign Up Page</td>
+            <td>Verify user can successfully sign up with valid required data</td>
+            <td>FAILED</td>
+            <td><a href="TC-SIGNUP-002/screenshots/" target="_blank">Screenshots</a> | 
+                <a href="TC-SIGNUP-002/videos/" target="_blank">Videos</a> | 
+                <a href="TC-SIGNUP-002/test.log" target="_blank">Log</a></td>
+        </tr>        <tr class="status-passed">
+            <td>TC-SIGNUP-003</td>
+            <td>Sign Up Page</td>
+            <td>Verify sign up fails when 'First Name' field is empty</td>
+            <td>PASSED</td>
+            <td><a href="TC-SIGNUP-003/screenshots/" target="_blank">Screenshots</a> | 
+                <a href="TC-SIGNUP-003/videos/" target="_blank">Videos</a> | 
+                <a href="TC-SIGNUP-003/test.log" target="_blank">Log</a></td>
+        </tr>        <tr class="status-passed">
+            <td>TC-SIGNUP-004</td>
+            <td>Sign Up Page</td>
+            <td>Verify sign up fails when 'Last Name' field is empty</td>
+            <td>PASSED</td>
+            <td><a href="TC-SIGNUP-004/screenshots/" target="_blank">Screenshots</a> | 
+                <a href="TC-SIGNUP-004/videos/" target="_blank">Videos</a> | 
+                <a href="TC-SIGNUP-004/test.log" target="_blank">Log</a></td>
+        </tr>        <tr class="status-passed">
+            <td>TC-SIGNUP-005</td>
+            <td>Sign Up Page</td>
+            <td>Verify sign up fails when 'Email' field is empty</td>
+            <td>PASSED</td>
+            <td><a href="TC-SIGNUP-005/screenshots/" target="_blank">Screenshots</a> | 
+                <a href="TC-SIGNUP-005/videos/" target="_blank">Videos</a> | 
+                <a href="TC-SIGNUP-005/test.log" target="_blank">Log</a></td>
+        </tr>        <tr class="status-passed">
+            <td>TC-SIGNUP-006</td>
+            <td>Sign Up Page</td>
+            <td>Verify sign up fails when 'Password' field is empty</td>
+            <td>PASSED</td>
+            <td><a href="TC-SIGNUP-006/screenshots/" target="_blank">Screenshots</a> | 
+                <a href="TC-SIGNUP-006/videos/" target="_blank">Videos</a> | 
+                <a href="TC-SIGNUP-006/test.log" target="_blank">Log</a></td>
+        </tr>        <tr class="status-passed">
+            <td>TC-SIGNUP-007</td>
+            <td>Sign Up Page</td>
+            <td>Verify sign up fails when 'Re-Enter Password' field is empty</td>
+            <td>PASSED</td>
+            <td><a href="TC-SIGNUP-007/screenshots/" target="_blank">Screenshots</a> | 
+                <a href="TC-SIGNUP-007/videos/" target="_blank">Videos</a> | 
+                <a href="TC-SIGNUP-007/test.log" target="_blank">Log</a></td>
+        </tr>        <tr class="status-failed">
+            <td>TC-SIGNUP-008</td>
+            <td>Sign Up Page</td>
+            <td>Verify sign up fails with invalid email format</td>
+            <td>FAILED</td>
+            <td><a href="TC-SIGNUP-008/screenshots/" target="_blank">Screenshots</a> | 
+                <a href="TC-SIGNUP-008/videos/" target="_blank">Videos</a> | 
+                <a href="TC-SIGNUP-008/test.log" target="_blank">Log</a></td>
+        </tr>        <tr class="status-passed">
+            <td>TC-SIGNUP-009</td>
+            <td>Sign Up Page</td>
+            <td>Verify sign up fails when passwords do not match</td>
+            <td>PASSED</td>
+            <td><a href="TC-SIGNUP-009/screenshots/" target="_blank">Screenshots</a> | 
+                <a href="TC-SIGNUP-009/videos/" target="_blank">Videos</a> | 
+                <a href="TC-SIGNUP-009/test.log" target="_blank">Log</a></td>
+        </tr>        <tr class="status-passed">
+            <td>TC-SIGNUP-010</td>
+            <td>Sign Up Page</td>
+            <td>Verify sign up fails with a password that is too short</td>
+            <td>PASSED</td>
+            <td><a href="TC-SIGNUP-010/screenshots/" target="_blank">Screenshots</a> | 
+                <a href="TC-SIGNUP-010/videos/" target="_blank">Videos</a> | 
+                <a href="TC-SIGNUP-010/test.log" target="_blank">Log</a></td>
+        </tr>        <tr class="status-failed">
+            <td>TC-SIGNUP-011</td>
+            <td>Sign Up Page</td>
+            <td>Verify sign up handles invalid phone number format (if required/validated)</td>
+            <td>FAILED</td>
+            <td><a href="TC-SIGNUP-011/screenshots/" target="_blank">Screenshots</a> | 
+                <a href="TC-SIGNUP-011/videos/" target="_blank">Videos</a> | 
+                <a href="TC-SIGNUP-011/test.log" target="_blank">Log</a></td>
+        </tr>        <tr class="status-passed">
+            <td>TC-SIGNUP-012</td>
+            <td>Sign Up Page</td>
+            <td>Verify 'Sign In Here' link navigates to the Login page</td>
+            <td>PASSED</td>
+            <td><a href="TC-SIGNUP-012/screenshots/" target="_blank">Screenshots</a> | 
+                <a href="TC-SIGNUP-012/videos/" target="_blank">Videos</a> | 
+                <a href="TC-SIGNUP-012/test.log" target="_blank">Log</a></td>
+        </tr>        <tr class="status-passed">
+            <td>TC-SIGNUP-013</td>
+            <td>Sign Up Page</td>
+            <td>Verify 'Sign up with Google' button initiates Google authentication flow</td>
+            <td>PASSED</td>
+            <td><a href="TC-SIGNUP-013/screenshots/" target="_blank">Screenshots</a> | 
+                <a href="TC-SIGNUP-013/videos/" target="_blank">Videos</a> | 
+                <a href="TC-SIGNUP-013/test.log" target="_blank">Log</a></td>
+        </tr>        <tr class="status-passed">
+            <td>TC-SIGNUP-014</td>
+            <td>Sign Up Page</td>
+            <td>Verify 'Sign up with Facebook' button initiates Facebook authentication flow</td>
+            <td>PASSED</td>
+            <td><a href="TC-SIGNUP-014/screenshots/" target="_blank">Screenshots</a> | 
+                <a href="TC-SIGNUP-014/videos/" target="_blank">Videos</a> | 
+                <a href="TC-SIGNUP-014/test.log" target="_blank">Log</a></td>
+        </tr>    </table>
+</body>
+</html>

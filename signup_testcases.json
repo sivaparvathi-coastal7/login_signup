@@ -1,0 +1,445 @@
+{
+  "testCases": [
+    {
+      "id": "TC-SIGNUP-001",
+      "module": "Sign Up Page",
+      "function": "testSignUpPageElementsVisibility",
+      "title": "Verify visibility of all key UI elements on the Sign Up page",
+      "preconditions": "Browser is open and navigated to the signup page.",
+      "inputs": {
+        "url": "https://dev.vox.snappod.ai/signup"
+      },
+      "steps": [
+        "Navigate to the signup page: await page.goto(inputs.url)",
+        "Verify 'Logo' image is visible: await expect(page.getByAltText('Logo')).toBeVisible()",
+        "Verify 'Start creating!' heading is visible: await expect(page.getByRole('heading', { name: 'Start creating!' })).toBeVisible()",
+        "Verify 'Already have an account?' text is visible: await expect(page.getByText('Already have an account?')).toBeVisible()",
+        "Verify 'Sign In Here' link is visible: await expect(page.getByRole('link', { name: 'Sign In Here' })).toBeVisible()",
+        "Verify 'Sign up with Google' button is visible: await expect(page.getByRole('button', { name: 'Sign up with Google' })).toBeVisible()",
+        "Verify 'Sign up with Facebook' button is visible: await expect(page.getByRole('button', { name: 'Sign up with Facebook' })).toBeVisible()",
+        "Verify 'First Name *' label is visible: await expect(page.getByLabelText('First Name *')).toBeVisible()",
+        "Verify 'Last Name *' label is visible: await expect(page.getByLabelText('Last Name *')).toBeVisible()",
+        "Verify 'Phone Number' label is visible: await expect(page.getByLabelText('Phone Number')).toBeVisible()",
+        "Verify 'Email *' label is visible: await expect(page.getByLabelText('Email *')).toBeVisible()",
+        "Verify 'Password *' label is visible: await expect(page.getByLabelText('Password *')).toBeVisible()",
+        "Verify 'Re-Enter Password *' label is visible: await expect(page.getByLabelText('Re-Enter Password *')).toBeVisible()",
+        "Verify 'Sign Up' button is visible: await expect(page.getByRole('button', { name: 'Sign Up' })).toBeVisible()"
+      ],
+      "expected": [
+        "All specified UI elements are visible and correctly displayed on the Sign Up page."
+      ]
+    },
+    {
+      "id": "TC-SIGNUP-002",
+      "module": "Sign Up Page",
+      "function": "testSuccessfulSignUp",
+      "title": "Verify user can successfully sign up with valid required data",
+      "preconditions": "Browser is open and navigated to the signup page.",
+      "inputs": {
+        "url": "https://dev.vox.snappod.ai/signup",
+        "firstName": "John",
+        "lastName": "Doe",
+        "phoneNumber": "1234567890",
+        "email": "sivaparvathiCS4-G3@coastalseven.com",
+        "password": "Coastal@123",
+        "firstNameInputLocator": "getByPlaceholderText('Enter your first name')",
+        "lastNameInputLocator": "getByPlaceholderText('Enter your last name')",
+        "phoneNumberInputLocator": "getByPlaceholderText('1 (702) 123-4567')",
+        "emailInputLocator": "getByPlaceholderText('Enter your Email Address')",
+        "passwordInputLocator": "getByPlaceholderText('Enter password')",
+        "reEnterPasswordInputLocator": "getByPlaceholderText('Re-Enter your Password')",
+        "signUpButtonLocator": "getByRole('button', { name: 'Sign Up' })"
+      },
+      "steps": [
+        "Navigate to the signup page: await page.goto(inputs.url)",
+        "Enter first name: await page.locator(inputs.firstNameInputLocator).fill(inputs.firstName)",
+        "Enter last name: await page.locator(inputs.lastNameInputLocator).fill(inputs.lastName)",
+        "Enter phone number: await page.locator(inputs.phoneNumberInputLocator).fill(inputs.phoneNumber)",
+        "Enter email address: await page.locator(inputs.emailInputLocator).fill(inputs.email)",
+        "Enter password: await page.locator(inputs.passwordInputLocator).fill(inputs.password)",
+        "Re-enter password: await page.locator(inputs.reEnterPasswordInputLocator).fill(inputs.password)",
+        "Click the 'Sign Up' button: await page.locator(inputs.signUpButtonLocator).click()",
+        "Verify successful redirection to a dashboard or success message: await expect(page).toHaveURL(/dashboard/)"
+      ],
+      "expected": [
+        "User is successfully registered and redirected to the dashboard or a success message is displayed.",
+        "No validation errors are shown."
+      ]
+    },
+    {
+      "id": "TC-SIGNUP-003",
+      "module": "Sign Up Page",
+      "function": "testSignUpMissingFirstName",
+      "title": "Verify sign up fails when 'First Name' field is empty",
+      "preconditions": "Browser is open and navigated to the signup page.",
+      "inputs": {
+        "url": "https://dev.vox.snappod.ai/signup",
+        "firstName": "",
+        "lastName": "Doe",
+        "email": "test@example.com",
+        "password": "SecurePassword123!",
+        "firstNameInputLocator": "getByPlaceholderText('Enter your first name')",
+        "lastNameInputLocator": "getByPlaceholderText('Enter your last name')",
+        "emailInputLocator": "getByPlaceholderText('Enter your Email Address')",
+        "passwordInputLocator": "getByPlaceholderText('Enter password')",
+        "reEnterPasswordInputLocator": "getByPlaceholderText('Re-Enter your Password')",
+        "signUpButtonLocator": "getByRole('button', { name: 'Sign Up' })"
+      },
+      "steps": [
+        "Navigate to the signup page: await page.goto(inputs.url)",
+        "Ensure first name field is empty: await page.locator(inputs.firstNameInputLocator).fill(inputs.firstName)",
+        "Fill other required fields: await page.locator(inputs.lastNameInputLocator).fill(inputs.lastName)",
+        "await page.locator(inputs.emailInputLocator).fill(inputs.email)",
+        "await page.locator(inputs.passwordInputLocator).fill(inputs.password)",
+        "await page.locator(inputs.reEnterPasswordInputLocator).fill(inputs.password)",
+        "Click 'Sign Up' button: await page.locator(inputs.signUpButtonLocator).click()",
+        "Verify 'First Name' input shows validation message: await expect(page.locator(inputs.firstNameInputLocator)).toHaveJSProperty('validationMessage', 'Please fill out this field.')"
+      ],
+      "expected": [
+        "A browser-level or UI validation message prompts the user to fill out the first name field.",
+        "User remains on the sign up page."
+      ]
+    },
+    {
+      "id": "TC-SIGNUP-004",
+      "module": "Sign Up Page",
+      "function": "testSignUpMissingLastName",
+      "title": "Verify sign up fails when 'Last Name' field is empty",
+      "preconditions": "Browser is open and navigated to the signup page.",
+      "inputs": {
+        "url": "https://dev.vox.snappod.ai/signup",
+        "firstName": "John",
+        "lastName": "",
+        "email": "test@example.com",
+        "password": "SecurePassword123!",
+        "firstNameInputLocator": "getByPlaceholderText('Enter your first name')",
+        "lastNameInputLocator": "getByPlaceholderText('Enter your last name')",
+        "emailInputLocator": "getByPlaceholderText('Enter your Email Address')",
+        "passwordInputLocator": "getByPlaceholderText('Enter password')",
+        "reEnterPasswordInputLocator": "getByPlaceholderText('Re-Enter your Password')",
+        "signUpButtonLocator": "getByRole('button', { name: 'Sign Up' })"
+      },
+      "steps": [
+        "Navigate to the signup page: await page.goto(inputs.url)",
+        "Fill first name: await page.locator(inputs.firstNameInputLocator).fill(inputs.firstName)",
+        "Ensure last name field is empty: await page.locator(inputs.lastNameInputLocator).fill(inputs.lastName)",
+        "Fill other required fields: await page.locator(inputs.emailInputLocator).fill(inputs.email)",
+        "await page.locator(inputs.passwordInputLocator).fill(inputs.password)",
+        "await page.locator(inputs.reEnterPasswordInputLocator).fill(inputs.password)",
+        "Click 'Sign Up' button: await page.locator(inputs.signUpButtonLocator).click()",
+        "Verify 'Last Name' input shows validation message: await expect(page.locator(inputs.lastNameInputLocator)).toHaveJSProperty('validationMessage', 'Please fill out this field.')"
+      ],
+      "expected": [
+        "A browser-level or UI validation message prompts the user to fill out the last name field.",
+        "User remains on the sign up page."
+      ]
+    },
+    {
+      "id": "TC-SIGNUP-005",
+      "module": "Sign Up Page",
+      "function": "testSignUpMissingEmail",
+      "title": "Verify sign up fails when 'Email' field is empty",
+      "preconditions": "Browser is open and navigated to the signup page.",
+      "inputs": {
+        "url": "https://dev.vox.snappod.ai/signup",
+        "firstName": "John",
+        "lastName": "Doe",
+        "email": "",
+        "password": "SecurePassword123!",
+        "firstNameInputLocator": "getByPlaceholderText('Enter your first name')",
+        "lastNameInputLocator": "getByPlaceholderText('Enter your last name')",
+        "emailInputLocator": "getByPlaceholderText('Enter your Email Address')",
+        "passwordInputLocator": "getByPlaceholderText('Enter password')",
+        "reEnterPasswordInputLocator": "getByPlaceholderText('Re-Enter your Password')",
+        "signUpButtonLocator": "getByRole('button', { name: 'Sign Up' })"
+      },
+      "steps": [
+        "Navigate to the signup page: await page.goto(inputs.url)",
+        "Fill first name: await page.locator(inputs.firstNameInputLocator).fill(inputs.firstName)",
+        "Fill last name: await page.locator(inputs.lastNameInputLocator).fill(inputs.lastName)",
+        "Ensure email field is empty: await page.locator(inputs.emailInputLocator).fill(inputs.email)",
+        "Fill password fields: await page.locator(inputs.passwordInputLocator).fill(inputs.password)",
+        "await page.locator(inputs.reEnterPasswordInputLocator).fill(inputs.password)",
+        "Click 'Sign Up' button: await page.locator(inputs.signUpButtonLocator).click()",
+        "Verify 'Email' input shows validation message: await expect(page.locator(inputs.emailInputLocator)).toHaveJSProperty('validationMessage', 'Please fill out this field.')"
+      ],
+      "expected": [
+        "A browser-level or UI validation message prompts the user to fill out the email field.",
+        "User remains on the sign up page."
+      ]
+    },
+    {
+      "id": "TC-SIGNUP-006",
+      "module": "Sign Up Page",
+      "function": "testSignUpMissingPassword",
+      "title": "Verify sign up fails when 'Password' field is empty",
+      "preconditions": "Browser is open and navigated to the signup page.",
+      "inputs": {
+        "url": "https://dev.vox.snappod.ai/signup",
+        "firstName": "John",
+        "lastName": "Doe",
+        "email": "test@example.com",
+        "password": "",
+        "reEnterPassword": "SecurePassword123!",
+        "firstNameInputLocator": "getByPlaceholderText('Enter your first name')",
+        "lastNameInputLocator": "getByPlaceholderText('Enter your last name')",
+        "emailInputLocator": "getByPlaceholderText('Enter your Email Address')",
+        "passwordInputLocator": "getByPlaceholderText('Enter password')",
+        "reEnterPasswordInputLocator": "getByPlaceholderText('Re-Enter your Password')",
+        "signUpButtonLocator": "getByRole('button', { name: 'Sign Up' })"
+      },
+      "steps": [
+        "Navigate to the signup page: await page.goto(inputs.url)",
+        "Fill first name: await page.locator(inputs.firstNameInputLocator).fill(inputs.firstName)",
+        "Fill last name: await page.locator(inputs.lastNameInputLocator).fill(inputs.lastName)",
+        "Fill email: await page.locator(inputs.emailInputLocator).fill(inputs.email)",
+        "Ensure password field is empty: await page.locator(inputs.passwordInputLocator).fill(inputs.password)",
+        "Fill re-enter password: await page.locator(inputs.reEnterPasswordInputLocator).fill(inputs.reEnterPassword)",
+        "Click 'Sign Up' button: await page.locator(inputs.signUpButtonLocator).click()",
+        "Verify 'Password' input shows validation message: await expect(page.locator(inputs.passwordInputLocator)).toHaveJSProperty('validationMessage', 'Please fill out this field.')"
+      ],
+      "expected": [
+        "A browser-level or UI validation message prompts the user to fill out the password field.",
+        "User remains on the sign up page."
+      ]
+    },
+    {
+      "id": "TC-SIGNUP-007",
+      "module": "Sign Up Page",
+      "function": "testSignUpMissingReEnterPassword",
+      "title": "Verify sign up fails when 'Re-Enter Password' field is empty",
+      "preconditions": "Browser is open and navigated to the signup page.",
+      "inputs": {
+        "url": "https://dev.vox.snappod.ai/signup",
+        "firstName": "John",
+        "lastName": "Doe",
+        "email": "test@example.com",
+        "password": "SecurePassword123!",
+        "reEnterPassword": "",
+        "firstNameInputLocator": "getByPlaceholderText('Enter your first name')",
+        "lastNameInputLocator": "getByPlaceholderText('Enter your last name')",
+        "emailInputLocator": "getByPlaceholderText('Enter your Email Address')",
+        "passwordInputLocator": "getByPlaceholderText('Enter password')",
+        "reEnterPasswordInputLocator": "getByPlaceholderText('Re-Enter your Password')",
+        "signUpButtonLocator": "getByRole('button', { name: 'Sign Up' })"
+      },
+      "steps": [
+        "Navigate to the signup page: await page.goto(inputs.url)",
+        "Fill first name: await page.locator(inputs.firstNameInputLocator).fill(inputs.firstName)",
+        "Fill last name: await page.locator(inputs.lastNameInputLocator).fill(inputs.lastName)",
+        "Fill email: await page.locator(inputs.emailInputLocator).fill(inputs.email)",
+        "Fill password: await page.locator(inputs.passwordInputLocator).fill(inputs.password)",
+        "Ensure re-enter password field is empty: await page.locator(inputs.reEnterPasswordInputLocator).fill(inputs.reEnterPassword)",
+        "Click 'Sign Up' button: await page.locator(inputs.signUpButtonLocator).click()",
+        "Verify 'Re-Enter Password' input shows validation message: await expect(page.locator(inputs.reEnterPasswordInputLocator)).toHaveJSProperty('validationMessage', 'Please fill out this field.')"
+      ],
+      "expected": [
+        "A browser-level or UI validation message prompts the user to fill out the re-enter password field.",
+        "User remains on the sign up page."
+      ]
+    },
+    {
+      "id": "TC-SIGNUP-008",
+      "module": "Sign Up Page",
+      "function": "testSignUpInvalidEmailFormat",
+      "title": "Verify sign up fails with invalid email format",
+      "preconditions": "Browser is open and navigated to the signup page.",
+      "inputs": {
+        "url": "https://dev.vox.snappod.ai/signup",
+        "firstName": "John",
+        "lastName": "Doe",
+        "email": "invalid-email",
+        "password": "SecurePassword123!",
+        "firstNameInputLocator": "getByPlaceholderText('Enter your first name')",
+        "lastNameInputLocator": "getByPlaceholderText('Enter your last name')",
+        "emailInputLocator": "getByPlaceholderText('Enter your Email Address')",
+        "passwordInputLocator": "getByPlaceholderText('Enter password')",
+        "reEnterPasswordInputLocator": "getByPlaceholderText('Re-Enter your Password')",
+        "signUpButtonLocator": "getByRole('button', { name: 'Sign Up' })"
+      },
+      "steps": [
+        "Navigate to the signup page: await page.goto(inputs.url)",
+        "Fill all fields with valid data except for email: await page.locator(inputs.firstNameInputLocator).fill(inputs.firstName)",
+        "await page.locator(inputs.lastNameInputLocator).fill(inputs.lastName)",
+        "Enter an invalid email format: await page.locator(inputs.emailInputLocator).fill(inputs.email)",
+        "await page.locator(inputs.passwordInputLocator).fill(inputs.password)",
+        "await page.locator(inputs.reEnterPasswordInputLocator).fill(inputs.password)",
+        "Click 'Sign Up' button: await page.locator(inputs.signUpButtonLocator).click()",
+        "Verify 'Email' input shows validation message: await expect(page.locator(inputs.emailInputLocator)).toHaveJSProperty('validationMessage', expect.stringContaining('@'))"
+      ],
+      "expected": [
+        "A browser-level or UI validation message prompts the user for a valid email format.",
+        "User remains on the sign up page."
+      ]
+    },
+    {
+      "id": "TC-SIGNUP-009",
+      "module": "Sign Up Page",
+      "function": "testSignUpMismatchedPasswords",
+      "title": "Verify sign up fails when passwords do not match",
+      "preconditions": "Browser is open and navigated to the signup page.",
+      "inputs": {
+        "url": "https://dev.vox.snappod.ai/signup",
+        "firstName": "John",
+        "lastName": "Doe",
+        "email": "test@example.com",
+        "password": "SecurePassword123!",
+        "reEnterPassword": "MismatchPassword123",
+        "firstNameInputLocator": "getByPlaceholderText('Enter your first name')",
+        "lastNameInputLocator": "getByPlaceholderText('Enter your last name')",
+        "emailInputLocator": "getByPlaceholderText('Enter your Email Address')",
+        "passwordInputLocator": "getByPlaceholderText('Enter password')",
+        "reEnterPasswordInputLocator": "getByPlaceholderText('Re-Enter your Password')",
+        "signUpButtonLocator": "getByRole('button', { name: 'Sign Up' })",
+        "expectedErrorMessage": "Passwords do not match."
+      },
+      "steps": [
+        "Navigate to the signup page: await page.goto(inputs.url)",
+        "Fill all fields with valid data: await page.locator(inputs.firstNameInputLocator).fill(inputs.firstName)",
+        "await page.locator(inputs.lastNameInputLocator).fill(inputs.lastName)",
+        "await page.locator(inputs.emailInputLocator).fill(inputs.email)",
+        "Enter first password: await page.locator(inputs.passwordInputLocator).fill(inputs.password)",
+        "Enter a different password in re-enter field: await page.locator(inputs.reEnterPasswordInputLocator).fill(inputs.reEnterPassword)",
+        "Click 'Sign Up' button: await page.locator(inputs.signUpButtonLocator).click()",
+        "Verify an error message about mismatched passwords is displayed: await expect(page.getByText(inputs.expectedErrorMessage)).toBeVisible()"
+      ],
+      "expected": [
+        "An error message indicating that passwords do not match is displayed.",
+        "User remains on the sign up page."
+      ]
+    },
+    {
+      "id": "TC-SIGNUP-010",
+      "module": "Sign Up Page",
+      "function": "testSignUpShortPassword",
+      "title": "Verify sign up fails with a password that is too short",
+      "preconditions": "Browser is open and navigated to the signup page.",
+      "inputs": {
+        "url": "https://dev.vox.snappod.ai/signup",
+        "firstName": "John",
+        "lastName": "Doe",
+        "email": "shortpass@example.com",
+        "password": "short",
+        "firstNameInputLocator": "getByPlaceholderText('Enter your first name')",
+        "lastNameInputLocator": "getByPlaceholderText('Enter your last name')",
+        "emailInputLocator": "getByPlaceholderText('Enter your Email Address')",
+        "passwordInputLocator": "getByPlaceholderText('Enter password')",
+        "reEnterPasswordInputLocator": "getByPlaceholderText('Re-Enter your Password')",
+        "signUpButtonLocator": "getByRole('button', { name: 'Sign Up' })",
+        "expectedErrorMessage": "Password must be at least 8 characters long."
+      },
+      "steps": [
+        "Navigate to the signup page: await page.goto(inputs.url)",
+        "Fill all fields with valid data except for password: await page.locator(inputs.firstNameInputLocator).fill(inputs.firstName)",
+        "await page.locator(inputs.lastNameInputLocator).fill(inputs.lastName)",
+        "await page.locator(inputs.emailInputLocator).fill(inputs.email)",
+        "Enter a short password: await page.locator(inputs.passwordInputLocator).fill(inputs.password)",
+        "Re-enter the short password: await page.locator(inputs.reEnterPasswordInputLocator).fill(inputs.password)",
+        "Click 'Sign Up' button: await page.locator(inputs.signUpButtonLocator).click()",
+        "Verify an error message for short password is displayed: await expect(page.getByText(inputs.expectedErrorMessage)).toBeVisible()"
+      ],
+      "expected": [
+        "An error message indicating the password is too short is displayed.",
+        "User remains on the sign up page."
+      ]
+    },
+    {
+      "id": "TC-SIGNUP-011",
+      "module": "Sign Up Page",
+      "function": "testSignUpInvalidPhoneNumberFormat",
+      "title": "Verify sign up handles invalid phone number format (if required/validated)",
+      "preconditions": "Browser is open and navigated to the signup page. Phone number is not strictly required but validation might apply.",
+      "inputs": {
+        "url": "https://dev.vox.snappod.ai/signup",
+        "firstName": "John",
+        "lastName": "Doe",
+        "phoneNumber": "123",
+        "email": "phone@example.com",
+        "password": "SecurePassword123!",
+        "firstNameInputLocator": "getByPlaceholderText('Enter your first name')",
+        "lastNameInputLocator": "getByPlaceholderText('Enter your last name')",
+        "phoneNumberInputLocator": "getByPlaceholderText('1 (702) 123-4567')",
+        "emailInputLocator": "getByPlaceholderText('Enter your Email Address')",
+        "passwordInputLocator": "getByPlaceholderText('Enter password')",
+        "reEnterPasswordInputLocator": "getByPlaceholderText('Re-Enter your Password')",
+        "signUpButtonLocator": "getByRole('button', { name: 'Sign Up' })",
+        "expectedErrorMessage": "Please enter a valid phone number."
+      },
+      "steps": [
+        "Navigate to the signup page: await page.goto(inputs.url)",
+        "Fill all required fields: await page.locator(inputs.firstNameInputLocator).fill(inputs.firstName)",
+        "await page.locator(inputs.lastNameInputLocator).fill(inputs.lastName)",
+        "Enter an invalid phone number: await page.locator(inputs.phoneNumberInputLocator).fill(inputs.phoneNumber)",
+        "await page.locator(inputs.emailInputLocator).fill(inputs.email)",
+        "await page.locator(inputs.passwordInputLocator).fill(inputs.password)",
+        "await page.locator(inputs.reEnterPasswordInputLocator).fill(inputs.password)",
+        "Click 'Sign Up' button: await page.locator(inputs.signUpButtonLocator).click()",
+        "Verify an error message for invalid phone number format is displayed: await expect(page.getByText(inputs.expectedErrorMessage)).toBeVisible()"
+      ],
+      "expected": [
+        "An error message indicating an invalid phone number format is displayed.",
+        "User remains on the sign up page."
+      ]
+    },
+    {
+      "id": "TC-SIGNUP-012",
+      "module": "Sign Up Page",
+      "function": "testNavigateToLoginPageFromSignUp",
+      "title": "Verify 'Sign In Here' link navigates to the Login page",
+      "preconditions": "Browser is open and navigated to the signup page.",
+      "inputs": {
+        "url": "https://dev.vox.snappod.ai/signup",
+        "signInLinkLocator": "getByRole('link', { name: 'Sign In Here' })",
+        "expectedLoginUrl": "https://dev.vox.snappod.ai/login"
+      },
+      "steps": [
+        "Navigate to the signup page: await page.goto(inputs.url)",
+        "Click the 'Sign In Here' link: await page.locator(inputs.signInLinkLocator).click()",
+        "Verify navigation to the Login page: await expect(page).toHaveURL(inputs.expectedLoginUrl)"
+      ],
+      "expected": [
+        "User is successfully redirected to the Login page."
+      ]
+    },
+    {
+      "id": "TC-SIGNUP-013",
+      "module": "Sign Up Page",
+      "function": "testSignUpWithGoogleButton",
+      "title": "Verify 'Sign up with Google' button initiates Google authentication flow",
+      "preconditions": "Browser is open and navigated to the signup page.",
+      "inputs": {
+        "url": "https://dev.vox.snappod.ai/signup",
+        "googleSignUpButtonLocator": "getByRole('button', { name: 'Sign up with Google' })"
+      },
+      "steps": [
+        "Navigate to the signup page: await page.goto(inputs.url)",
+        "Click the 'Sign up with Google' button: await page.locator(inputs.googleSignUpButtonLocator).click()",
+        "Verify that a new page or modal related to Google authentication is opened: await page.waitForURL(/accounts.google.com/)"
+      ],
+      "expected": [
+        "The browser navigates to or opens a modal for the Google authentication process."
+      ]
+    },
+    {
+      "id": "TC-SIGNUP-014",
+      "module": "Sign Up Page",
+      "function": "testSignUpWithFacebookButton",
+      "title": "Verify 'Sign up with Facebook' button initiates Facebook authentication flow",
+      "preconditions": "Browser is open and navigated to the signup page.",
+      "inputs": {
+        "url": "https://dev.vox.snappod.ai/signup",
+        "facebookSignUpButtonLocator": "getByRole('button', { name: 'Sign up with Facebook' })"
+      },
+      "steps": [
+        "Navigate to the signup page: await page.goto(inputs.url)",
+        "Click the 'Sign up with Facebook' button: await page.locator(inputs.facebookSignUpButtonLocator).click()",
+        "Verify that a new page or modal related to Facebook authentication is opened: await page.waitForURL(/www.facebook.com/)"
+      ],
+      "expected": [
+        "The browser navigates to or opens a modal for the Facebook authentication process."
+      ]
+    }
+  ],
+  "totalTestCases": 14,
+  "group": "Signup"
+}

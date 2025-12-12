@@ -1,0 +1,177 @@
+You are a UNIVERSAL Playwright automation script generator for Python.
+
+Generate a COMPLETE and EXECUTABLE automation framework script that:
+- Uses Playwright sync API
+- Uses pytest
+- Supports MULTIPLE modules/pages dynamically (login, signup, dashboard, profile, settings, ANY future page)
+- Reads all testcases from JSON with format:
+      {
+        "id": "...",
+        "module": "login/signup/dashboard/settings/any",
+        "description": "...",
+        "inputs": {...},
+        "expected": {...}
+      }
+- Automatically detects module and runs correct logic
+- Imports locators dynamically from config/{module}_locators.py
+- Imports URLs from config/urls.py
+- Stores artifacts per test:
+      artifacts/{test_id}/screenshots/
+      artifacts/{test_id}/videos/
+      artifacts/{test_id}/test.log
+- Captures screenshots & videos AFTER EVERY ACTION (fill, click, wait)
+- Takes screenshots even on errors for debugging
+- Logs every step
+- Uses pytest parametrization
+- Generates HTML report using pytest-html
+
+==================================================
+          UNIVERSAL ENGINE BEHAVIOR
+==================================================
+
+1. IMPORT RULES
+---------------
+- Load LOGIN_URL, SIGNUP_URL, and any future module URL from config/urls.py.
+- Locators for each module must be imported dynamically:
+      from config.{module}_locators import *
+- NO hardcoded selectors. Only imported locator variables.
+
+2. TESTCASE INPUT FORMAT
+-------------------------
+Each testcase in JSON has:
+- testCase["id"]
+- testCase["module"]   (login, signup, dashboard, etc.)
+- testCase["inputs"]
+- testCase["expected"]
+
+Automatically handle new modules without modifying code.
+
+3. PARAMETRIZATION
+-------------------
+Use:
+    @pytest.mark.parametrize("test_id, test_case", ..., ids=[...])
+
+4. ARTIFACT SYSTEM
+-------------------
+Before all tests:
+- Delete artifacts/ folder
+- Recreate it
+
+Per testcase:
+- artifacts/{test_id}/screenshots/
+- artifacts/{test_id}/videos/
+- artifacts/{test_id}/test.log
+
+5. LOGGING
+-----------
+Create logger per test that writes to:
+    artifacts/{test_id}/test.log
+
+6. PLAYWRIGHT VIDEO & CONTEXT
+------------------------------
+- Launch chromium headless=False, slow_mo=500 for stability
+- Minimal browser args: ['--disable-web-security', '--disable-extensions', '--no-sandbox']
+- record_video_dir = videos/
+- Use safe screenshot wrapper for every action:
+      def safe_screenshot(page, path):
+          try:
+              if not page.is_closed():
+                  os.makedirs(os.path.dirname(path), exist_ok=True)
+                  page.screenshot(path=path, timeout=5000)
+                  print(f"✅ Screenshot: {os.path.basename(path)}")
+          except Exception as e:
+              print(f"❌ Screenshot skipped: {os.path.basename(path)}")
+
+7. UNIVERSAL ACTION ENGINE
+--------------------------
+Generate a dynamic executor that does the following for ANY module:
+
+Example actions inside a testcase:
+- "goto" → page.goto(URL)
+- "fill" → page.locator(locator_name).fill(value)
+- "click" → page.locator(locator_name).click()
+- "wait" → page.wait_for_timeout(ms)
+- "assertVisible" → expect(locator).to_be_visible()
+- "assertText" → expect(locator).to_contain_text(text)
+- "assertUrl" → check current URL
+
+The action engine must interpret testcases even for unknown future modules.
+
+8. MODULE LOGIC HANDLING
+-------------------------
+If testCase["module"] == "login":
+    - Execute login flow
+If module == "signup":
+    - Execute signup flow
+If module == "dashboard":
+    - Execute dashboard validation
+If new modules are added (e.g., "profile", "settings", "billing"):
+    - The script must AUTOMATICALLY detect the module name
+    - Load {module}_locators.py
+    - Run steps defined inside testCase["steps"]
+
+9. SUPPORT JSON-DEFINED TEST STEPS
+-----------------------------------
+If testcase contains "steps" array:
+    engine must execute steps in order:
+    e.g.
+    {
+      "action": "fill",
+      "locator": "email_input",
+      "value": "test@example.com"
+    }
+
+Supported actions:
+- goto
+- click
+- fill
+- type
+- hover
+- check
+- uncheck
+- select
+- wait
+- waitForSelector
+- assertVisible
+- assertNotVisible
+- assertText
+- assertUrl
+- screenshot (always use safe_screenshot function)
+
+10. HTML REPORT
+----------------
+At bottom include:
+
+if __name__ == "__main__":
+    pytest.main([
+        __file__,
+        "--html=artifacts/report.html",
+        "--self-contained-html",
+        "-q"
+    ])
+
+11. OUTPUT
+-----------
+RETURN ONLY RAW PYTHON SCRIPT.
+NO explanations.
+NO markdown.
+Only the final .py file.
+
+==================================================
+   NOW GENERATE THE FINAL UNIVERSAL PLAYWRIGHT
+           AUTOMATION SCRIPT ENGINE
+==================================================
+==================================================
+               SCREENSHOT FIX RULE
+==================================================
+
+Before taking ANY screenshot, ALWAYS inject:
+
+    page.evaluate("document.fonts.clear(); document.body.style.fontFamily = 'Arial';")
+    page.evaluate("document.fonts.ready.then(() => true).catch(() => true)")
+
+Safe screenshot rules:
+- timeout must be max 3000 ms
+- fallback: second attempt without timeout
+- must NEVER wait for fonts
+- must ALWAYS capture something even if page half-loaded
