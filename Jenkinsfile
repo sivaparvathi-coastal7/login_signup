@@ -1,50 +1,35 @@
-pipeline {
-    agent any
-
-    tools {
-        // This tells Jenkins to use the Maven version you installed (Check Global Tool Configuration if this name differs)
-        maven 'maven' 
-    }
-
-    stages {
-        stage('Checkout') {
-            steps {
-                // Gets the latest code
-                checkout scm
-            }
-        }
-        
-        stage('Build & Test') {
-            steps {
-                echo '🚀 Starting Real Compilation...'
-                // This attempts to compile the Java code. If the code is bad, IT WILL FAIL HERE.
-                sh 'mvn clean test' 
-            }
-        }
-    }
-
-    post {
-        // This section ONLY runs if the build FAILS (Red)
+post {
+        // This 'failure' block ONLY runs if 'mvn test' fails
         failure {
             script {
-                echo '❌ Build Failed! Triggering Triage Engine...'
+                echo '❌ Tests Failed! Preparing data for Triage Engine...'
+
+                // 1. Construct the exact JSON Link for this build's test results
+                // This link points to the JSON data of the failed tests
+                def jsonReportLink = "${env.BUILD_URL}testReport/api/json?pretty=true"
                 
-                // 1. Get the Build URL so the Engine knows where to look
-                def buildUrl = env.BUILD_URL
-                def jobName = env.JOB_NAME
-                def buildNumber = env.BUILD_NUMBER
-                
-                // 2. TRIGGER THE TRIAGE ENGINE (Replace the URL below with your actual API endpoint)
-                // We send the Build URL to your AI so it can fetch the logs and analyze the error.
+                // 2. Prepare the payload to send to your opponent
+                // We send them the Build Number and the LINK to the errors
+                def payload = """
+                {
+                    "project": "${env.JOB_NAME}",
+                    "build_number": "${env.BUILD_NUMBER}",
+                    "status": "FAILURE",
+                    "error_data_link": "${jsonReportLink}"
+                }
+                """
+
+                echo "📤 Sending JSON Link to Opponent: ${jsonReportLink}"
+
+                // 3. Send it! (Replace the URL below with your Opponent's Link)
                 sh """
-                   curl -X POST -H "Content-Type: application/json" \
-                   -d '{"job": "${jobName}", "build": "${buildNumber}", "url": "${buildUrl}", "status": "FAILURE"}' \
-                   http://YOUR_TRIAGE_ENGINE_IP:5000/analyze
+                    curl -X POST -H "Content-Type: application/json" \
+                    -d '${payload}' \
+                    http://192.168.1.50:5000/webhook
                 """
             }
         }
         success {
-            echo '✅ Build Passed! No Triage needed.'
+            echo '✅ Tests Passed. No data sent.'
         }
     }
-}
