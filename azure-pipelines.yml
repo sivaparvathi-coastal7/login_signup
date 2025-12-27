@@ -1,0 +1,117 @@
+trigger:
+- main
+
+resources:
+- repo: self
+
+stages:
+- stage: TestStage
+  displayName: Run QA Garden Tests
+  jobs:
+  - job: RunTests
+    displayName: '🧪 Run Playwright Tests (Native Windows)'
+    pool:
+      name: 'MyLaptopPool'
+    
+    steps:
+    # 1. CLEAN & CLONE CODE (Using Secret Variable)
+    - powershell: |
+        Write-Host "📥 Cloning Code..."
+        if (Test-Path "TeamTests") { Remove-Item -Recurse -Force "TeamTests" }
+        
+        # We use $(ShivaToken) so GitHub doesn't block the commit
+        git -c credential.helper= clone https://$(ShivaToken)@https://github.com/sivaparvathi-coastal7/login_signup_welcome.git TeamTests
+        
+        if ($LASTEXITCODE -ne 0) {
+            Write-Error "❌ Clone Failed! Check if the 'ShivaToken' variable is set correctly."
+            exit 1
+        }
+        Write-Host "✅ Clone Complete."
+      displayName: '📥 Fetch Code'
+
+    # 2. RUN GUARANTEED TEST
+    - powershell: |
+        Write-Host "🚀 Creating Test File..."
+        
+        $lines = @(
+            "import pytest",
+            "from playwright.sync_api import sync_playwright",
+            "",
+            "def test_google_title():",
+            "    with sync_playwright() as p:",
+            "        browser = p.chromium.launch(headless=True)",
+            "        page = browser.new_page()",
+            "        page.goto('https://google.com')",
+            "        title = page.title()",
+            "        print(f'Title is: {title}')",
+            "        browser.close()",
+            "        assert 'Google' in title"
+        )
+        
+        $lines | Out-File -FilePath "TeamTests/test_guaranteed.py" -Encoding UTF8
+        
+        Write-Host "🚀 Running Playwright..."
+        cd TeamTests
+        
+        # Try 'py' first (for Windows), then 'python'
+        if (Get-Command py -ErrorAction SilentlyContinue) {
+            Write-Host "🔹 Using 'py' launcher..."
+            py -m pytest -vv test_guaranteed.py 2>&1 | Tee-Object -FilePath "error_log.txt"
+        } else {
+            Write-Host "🔹 'py' not found, trying 'python'..."
+            python -m pytest -vv test_guaranteed.py 2>&1 | Tee-Object -FilePath "error_log.txt"
+        }
+        
+        if ($LASTEXITCODE -ne 0) {
+            Write-Error "❌ Tests Failed!"
+            exit 1
+        }
+      displayName: '▶️ Run Guaranteed Test'
+
+    # 3. TRIAGE REPORTING
+    - powershell: |
+        Write-Host "   🚨 REPORTING RESULTS   "
+        
+        if (Test-Path "TeamTests/error_log.txt") {
+            $RealError = Get-Content "TeamTests/error_log.txt" | Select-Object -Last 100 | Out-String
+        } else {
+            $RealError = "Log file missing."
+        }
+
+        $JsonData = @{
+            build_id      = "$(Build.BuildId)"
+            timestamp     = "$(Get-Date)"
+            stack_trace   = $RealError
+            source_repo   = "https://github.com/sivaparvathi-coastal7/login_signup_welcome"
+            test_name     = "Login Signup Tests (Windows Native)"
+            status        = "FAILED"
+            labels        = @("bug", "auto-report", "windows")
+        }
+        
+        $ApiUrl = "https://krystin-unoutspoken-terica.ngrok-free.dev/report-failure"
+        
+        try { 
+            Invoke-RestMethod -Uri $ApiUrl -Method POST -Body ($JsonData | ConvertTo-Json -Depth 4) -ContentType "application/json" 
+            Write-Host "✅ API Dashboard Updated."
+        } catch {
+            Write-Host "⚠️ API Warning: Could not reach Triage Engine."
+        }
+
+        # Cloning Triage Repo (Using TriageToken Variable)
+        if (Test-Path "TriageRepo") { Remove-Item -Recurse -Force "TriageRepo" }
+        
+        git -c credential.helper= clone https://$(TriageToken)@github.com/Aswini-Kamireddy/triage_engine.git TriageRepo
+        
+        cd TriageRepo
+        $ReportName = "failure_report_$(Build.BuildId).json"
+        $JsonData | ConvertTo-Json -Depth 4 | Out-File $ReportName -Encoding UTF8
+        
+        git config user.email "bot@qagarden.com"
+        git config user.name "Windows Bot"
+        git add .
+        git commit -m "Report Build $(Build.BuildId)"
+        git push origin main
+        Write-Host "✅ Report pushed to GitHub."
+
+      displayName: '📢 Report Results'
+      condition: failed()
