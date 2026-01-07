@@ -1,0 +1,31 @@
+name: Playwright Tests (Docker)
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+
+jobs:
+  test:
+    timeout-minutes: 60
+    runs-on: ubuntu-latest
+    
+    # 👇 THIS IS THE NEW PART: We run inside the Docker image
+    container:
+      image: mcr.microsoft.com/playwright:v1.40.0-jammy
+
+    steps:
+    # 1. Check out code
+    - name: Checkout Code
+      uses: actions/checkout@v4
+
+    # 2. Install Python Dependencies
+    # Note: We don't need to install Python or Browsers; the Docker image has them!
+    - name: Install Pytest & Playwright Lib
+      run: |
+        pip install pytest playwright
+
+    # 3. Run the Tests
+    - name: Run Playwright Tests
+      run: python -m pytest
